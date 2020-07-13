@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scalepoint iFramed ECC</title>
+    <style type="text/css">
+        body {
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            font-family: "Roboto", SansSerif, Monospaced;
+            font-size: 13px;
+        }
+
+        #selectServer {
+            position: fixed;
+            display: block;
+            top: 0px;
+            left: 50%;
+            margin: -20px 0px 5px -175px;
+            height: 26px;
+            width: 390px;
+            z-index: 100;
+        }
+
+        #selectServer.did-fade-in {
+            height: 50px
+        }
+
+        #selectServer.start {
+            height: 50px
+        }
+
+        #selectServer input {
+            width: 300px
+        }
+
+        #selectServer button {
+            display: inline-block;
+            margin: 0;
+            height: 100%;
+            width: 30px;
+            padding: 0;
+        }
+
+        #selectServer div {
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            height: 20px;
+            margin: 0;
+            padding: 5px;
+            background-color: #F8F8F8;
+            color: #303030;
+            border: #707070 solid 2px;
+            border-radius: 5px;
+        }
+
+        #selectServer:hover {
+            animation: fade-in 0.4s ease-in 0.08s forwards;
+        }
+
+        #selectServer:not(:hover).did-fade-in {
+            animation-delay: 5s;
+            animation: fade-out 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fade-in {
+            from {
+                height: 26px;
+            }
+            to {
+                height: 50px;
+            }
+        }
+
+        @keyframes fade-out {
+            from {
+                height: 50px;
+            }
+            to {
+                height: 26px;
+            }
+        }
+
+        #serverSelect select, #serverSelect label {
+            display: inline-block;
+        }
+
+        label {
+            font-weight: bolder;
+            margin-top: -1px;
+        }
+
+        #framed-browser {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+        }
+
+    </style>
+    <script type="application/javascript">
+        document.addEventListener('animationstart', function (e) {
+            if (e.animationName === 'fade-in') {
+                document.getElementById('selectServer').classList.add('did-fade-in');
+            }
+        });
+
+        document.addEventListener('animationend', function (e) {
+            if (e.animationName === 'fade-out') {
+                document.getElementById('selectServer').classList.remove('did-fade-in');
+            }
+        });
+
+        function removeStart() {
+            document.getElementById('selectServer').classList.remove('start')
+            document.getElementById('selectServer').classList.add('did-fade-in')
+        }
+
+        function changeIFrameContent() {
+            var server = document.getElementById('server').value;
+
+            document.getElementById('framed-browser').src = server;
+        }
+    </script>
+</head>
+<body>
+    <form target="framed-browser">
+        <div id="selectServer" class="start">
+            <div>
+                <label for="server">Server:&nbsp;</label>
+                <input id="server" onchange="changeIFrameContent()" onblur="changeIFrameContent()" value="https://google.com/"/>
+                <button onclick="changeIFrameContent(); return false;">OK</button>
+            </div>
+        </div>
+    </form>
+
+    <iframe id="framed-browser" src="https://qa01.scalepoint.com/eccAdmin/de/login.action" onload="removeStart()"></iframe>
+</body>
+</html>
